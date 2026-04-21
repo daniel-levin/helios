@@ -1,9 +1,9 @@
 use std::process::Command;
 /*
- * Copyright 2024 Oxide Computer Company
+ * Copyright 2026 Oxide Computer Company
  */
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 
 pub fn dataset_exists(dataset: &str) -> Result<bool> {
     if dataset.contains('@') {

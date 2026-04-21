@@ -1,8 +1,8 @@
 /*
- * Copyright 2024 Oxide Computer Company
+ * Copyright 2026 Oxide Computer Company
  */
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use serde::Deserialize;
 use slog::{Drain, Logger};
 use std::io::IsTerminal;

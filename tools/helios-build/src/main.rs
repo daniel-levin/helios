@@ -5,7 +5,7 @@
 mod common;
 use common::*;
 
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{Context, Result, anyhow, bail};
 use helios_build_utils::metadata::{self, ArchiveType};
 use helios_build_utils::tree;
 use serde::Deserialize;
@@ -18,7 +18,7 @@ use std::os::unix::process::CommandExt;
 use std::path::Path;
 use std::process::Command;
 use std::time::{Instant, SystemTime};
-use time::{format_description, OffsetDateTime};
+use time::{OffsetDateTime, format_description};
 use walkdir::WalkDir;
 
 mod archive;
@@ -187,10 +187,10 @@ fn gate_name<P: AsRef<Path>>(p: P) -> Result<String> {
     if !p.is_dir() {
         bail!("{:?} is not a directory?", p);
     }
-    if let Some(basename) = p.file_name() {
-        if let Some(basename) = basename.to_str() {
-            return Ok(basename.trim().to_string());
-        }
+    if let Some(basename) = p.file_name()
+        && let Some(basename) = basename.to_str()
+    {
+        return Ok(basename.trim().to_string());
     }
     bail!("could not get base name of {:?}", p);
 }
@@ -276,12 +276,12 @@ impl Project {
     }
 
     fn skip_reason(&self) -> Option<String> {
-        if let Some(key) = self.unless_env.as_deref() {
-            if let Ok(value) = std::env::var(key) {
-                let value = value.to_ascii_lowercase();
-                if value == "no" || value == "0" || value == "false" {
-                    return Some(format!("{key:?} is set to {value:?}"));
-                }
+        if let Some(key) = self.unless_env.as_deref()
+            && let Ok(value) = std::env::var(key)
+        {
+            let value = value.to_ascii_lowercase();
+            if value == "no" || value == "0" || value == "false" {
+                return Some(format!("{key:?} is set to {value:?}"));
             }
         }
 
@@ -2004,14 +2004,11 @@ fn cmd_image(ca: &CommandArg) -> Result<()> {
      * Go through and create the per-board ROM images.
      */
     for (name, board) in target_boards.iter() {
-        if let Some(feat) = &board.feature {
-            if !features.contains(feat) {
-                info!(
-                    log,
-                    "skipping building ROM for {name} ('{feat}' disabled)"
-                );
-                continue;
-            }
+        if let Some(feat) = &board.feature
+            && !features.contains(feat)
+        {
+            info!(log, "skipping building ROM for {name} ('{feat}' disabled)");
+            continue;
         }
         info!(log, "building ROM for {name}");
 

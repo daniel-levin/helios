@@ -1,6 +1,6 @@
 use std::io::Write;
 /*
- * Copyright 2024 Oxide Computer Company
+ * Copyright 2026 Oxide Computer Company
  */
 
 use std::path::{Path, PathBuf};
@@ -9,7 +9,7 @@ use std::thread::JoinHandle;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::maybe_unlink;
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use helios_build_utils::metadata::Metadata;
 
 enum Act {

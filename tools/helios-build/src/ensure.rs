@@ -1,9 +1,9 @@
 /*
- * Copyright 2024 Oxide Computer Company
+ * Copyright 2026 Oxide Computer Company
  */
 
-use anyhow::{anyhow, bail, Result};
-use slog::{error, info, warn, Logger};
+use anyhow::{Result, anyhow, bail};
+use slog::{Logger, error, info, warn};
 use std::ffi::CString;
 use std::ffi::OsStr;
 use std::fs::{DirBuilder, File};

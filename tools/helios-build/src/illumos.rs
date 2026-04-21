@@ -1,16 +1,16 @@
 /*
- * Copyright 2020 Oxide Computer Company
+ * Copyright 2026 Oxide Computer Company
  */
 
-use super::common::{sleep, OutputExt};
-use anyhow::{bail, Result};
+use super::common::{OutputExt, sleep};
+use anyhow::{Result, bail};
 use slog::Logger;
 use std::collections::HashMap;
 use std::ffi::{CStr, CString};
 use std::io::Write;
 use std::os::raw::{c_char, c_int};
 use std::path::{Path, PathBuf};
-use std::process::{exit, Command};
+use std::process::{Command, exit};
 
 const PFEXEC: &str = "/bin/pfexec";
 const ZONEADM: &str = "/usr/sbin/zoneadm";
@@ -72,7 +72,7 @@ struct UserAttrRaw {
 }
 
 #[link(name = "secdb")]
-extern "C" {
+unsafe extern "C" {
     fn getusernam(buf: *const c_char) -> *mut UserAttrRaw;
     fn free_userattr(userattr: *mut UserAttrRaw);
 }
@@ -114,7 +114,7 @@ pub fn nodename() -> String {
 }
 
 #[link(name = "c")]
-extern "C" {
+unsafe extern "C" {
     fn getzoneid() -> i32;
     fn getzonenamebyid(id: i32, buf: *mut u8, buflen: usize) -> isize;
 }
@@ -241,11 +241,7 @@ impl Group {
 
 pub fn get_username() -> Result<Option<String>> {
     let uid = unsafe { libc::getuid() };
-    if let Some(pw) = get_passwd_by_id(uid)? {
-        Ok(pw.name)
-    } else {
-        Ok(None)
-    }
+    if let Some(pw) = get_passwd_by_id(uid)? { Ok(pw.name) } else { Ok(None) }
 }
 
 pub fn get_passwd_by_id(uid: u32) -> Result<Option<Passwd>> {

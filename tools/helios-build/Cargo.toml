@@ -1,13 +1,8 @@
 [package]
 name = "helios-build"
 version = "0.0.0"
-edition = "2021"
+edition = "2024"
 license = "MPL-2.0"
-#
-# Report a specific error in the case that the toolchain is too old for
-# let-else:
-#
-rust-version = "1.70.0"
 
 [dependencies]
 anyhow = "1"
